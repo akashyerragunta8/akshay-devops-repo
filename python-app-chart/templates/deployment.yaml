@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "python-app-chart.fullname" . }}
+  labels:
+    app: python
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: python
+  template:
+    metadata:
+      labels:
+        app: python
+    spec:
+      containers:
+        - name: app-pod
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          env:
+          - name: ENVIRONMENT_NAME
+            value: "{{ .Values.ENVIRONMENT_NAME }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+      imagePullSecrets:
+        - name: regcred
+
