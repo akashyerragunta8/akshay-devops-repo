@@ -1,0 +1,17 @@
+---
+- name: Deploy Helm chart and update environment variable
+  hosts: localhost
+  vars_prompt:
+    - name: "env"
+      prompt: "Enter the environment variable value"
+  tasks:
+    - name: Install Helm chart
+      community.kubernetes.helm:
+        name: python-app-chart
+        chart_ref: /home/ubuntu/eks-deployment-docker-registry/python-app-chart/
+        release_namespace: "{{ env }}"
+        release_state: present
+        wait_timeout: 300
+        release_values:
+          ENVIRONMENT_NAME: "{{ env }}"
+
